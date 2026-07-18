@@ -1,0 +1,21 @@
+# Maven
+backend/target/
+*.class
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Env
+.env
+
+# Database (persistent H2 files - local data only, not committed)
+backend/data/

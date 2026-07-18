@@ -189,3 +189,62 @@ tr.flagged-row { background: var(--warn-bg); }
 }
 .toast.show { opacity: 1; transform: translateY(0); }
 .toast.error { background: var(--wf-red); }
+
+/* ---- Login screen ---- */
+.login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #d71e28, #7a0d15);
+}
+
+.login-card {
+  background: white;
+  border-radius: 12px;
+  padding: 36px 32px;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  text-align: center;
+}
+
+.login-card h1 {
+  font-size: 1.3rem;
+  margin: 0 0 4px 0;
+  color: var(--ink);
+}
+
+.login-subtitle {
+  color: var(--muted);
+  margin: 0 0 20px 0;
+  font-size: 0.9rem;
+}
+
+.login-card input {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.login-btn-full {
+  width: 100%;
+  padding: 11px;
+  font-size: 0.95rem;
+}
+
+.login-error {
+  color: var(--wf-red);
+  font-size: 0.85rem;
+  margin-top: 10px;
+  min-height: 18px;
+}
+
+.login-hint {
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin-top: 16px;
+}

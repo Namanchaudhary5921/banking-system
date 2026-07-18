@@ -1,13 +1,22 @@
 // Thin wrapper around fetch() for the Banking System REST API.
-// Kept separate from app.js (UI logic) so the API contract is easy to
-// find/reuse on its own, e.g. from a test script or another client.
+// Credentials are captured once at login (see app.js handleLoginSubmit)
+// and reused for every subsequent request via getAuthHeader().
 
-const API_BASE = "http://localhost:8080/api";
+const API_BASE = "https://zany-space-fortnight-jjgrq5p9q5773qxw5-8080.app.github.dev/api";
+
+let currentCredentials = null; // { username, password }
+
+function setCredentials(username, password) {
+  currentCredentials = { username, password };
+}
+
+function clearCredentials() {
+  currentCredentials = null;
+}
 
 function getAuthHeader() {
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
-  return "Basic " + btoa(`${username}:${password}`);
+  if (!currentCredentials) return "";
+  return "Basic " + btoa(`${currentCredentials.username}:${currentCredentials.password}`);
 }
 
 async function apiRequest(path, options = {}) {
@@ -20,13 +29,9 @@ async function apiRequest(path, options = {}) {
     }
   });
 
-  const statusDot = document.getElementById("auth-status");
-
   if (response.status === 401 || response.status === 403) {
-    statusDot.className = "status-dot bad";
     throw new Error("Authentication failed - check username/password");
   }
-  statusDot.className = "status-dot ok";
 
   if (response.status === 204) return null;
 
@@ -58,4 +63,12 @@ const Api = {
   // Reports
   getSummary: () => apiRequest("/reports/summary"),
   getAuditLog: () => apiRequest("/reports/audit-log"),
+
+  // Self-service (customer login)
+  getMe: () => apiRequest("/me"),
+  getMyAccounts: () => apiRequest("/me/accounts"),
+  getMyTransactions: (accountNumber) => apiRequest(`/me/transactions/${accountNumber}`),
+  registerCustomerLogin: (body) => apiRequest("/auth/register", { method: "POST", body: JSON.stringify(body) }),
 };
+
+Api.deleteCustomer = (id) => apiRequest(`/customers/${id}`, { method: "DELETE" });

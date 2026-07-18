@@ -9,6 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "accounts")
+@com.fasterxml.jackson.annotation.JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "fieldHandler"})
 public class Account {
 
     @Id
@@ -44,6 +45,7 @@ public class Account {
     @Version
     private Long version;
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Transaction> transactions = new ArrayList<>();
 

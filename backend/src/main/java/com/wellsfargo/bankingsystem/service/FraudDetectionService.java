@@ -28,7 +28,7 @@ import java.util.Optional;
 @Service
 public class FraudDetectionService {
 
-    private static final BigDecimal LARGE_TXN_THRESHOLD = new BigDecimal("10000.00");
+    private static final BigDecimal LARGE_TXN_THRESHOLD = new BigDecimal("1000000.00");
     private static final int VELOCITY_WINDOW_MINUTES = 10;
     private static final int MAX_TXNS_PER_WINDOW = 5;
 

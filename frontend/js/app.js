@@ -1,11 +1,79 @@
-// UI logic: tab switching, form handling, table rendering.
+// UI logic: login gate, tab switching, form handling, table rendering.
 // Talks to the backend only through the Api object defined in api.js.
 
 document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("login-submit-btn").addEventListener("click", handleLoginSubmit);
+  document.getElementById("password").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") handleLoginSubmit();
+  });
+  document.getElementById("logout-btn").addEventListener("click", handleLogout);
+
   setupTabs();
   setupForms();
-  loadSummary();
 });
+
+// ---------- Login ----------
+async function handleLoginSubmit() {
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value;
+  const errorBox = document.getElementById("login-error");
+  errorBox.textContent = "";
+
+  if (!username || !password) {
+    errorBox.textContent = "Enter both username and password.";
+    return;
+  }
+
+  setCredentials(username, password);
+
+  try {
+    const me = await Api.getMe();
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("app-shell").style.display = "block";
+    document.getElementById("logged-in-as").textContent = `${me.username} (${me.role})`;
+    applyRoleUI(me.role);
+  } catch (err) {
+    clearCredentials();
+    errorBox.textContent = "Invalid username or password.";
+  }
+}
+
+function handleLogout() {
+  clearCredentials();
+  document.getElementById("app-shell").style.display = "none";
+  document.getElementById("login-screen").style.display = "flex";
+  document.getElementById("username").value = "";
+  document.getElementById("password").value = "";
+  document.getElementById("login-error").textContent = "";
+}
+
+function applyRoleUI(role) {
+  const staffTabs = ["dashboard", "customers", "accounts", "transactions", "reports"];
+  const myAccountBtn = document.querySelector('[data-tab="myaccount"]');
+
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+
+  if (role === "CUSTOMER") {
+    staffTabs.forEach(t => {
+      const btn = document.querySelector(`[data-tab="${t}"]`);
+      if (btn) btn.style.display = "none";
+    });
+    myAccountBtn.style.display = "inline-block";
+    myAccountBtn.classList.add("active");
+    document.getElementById("myaccount").classList.add("active");
+    loadMyAccounts();
+  } else {
+    staffTabs.forEach(t => {
+      const btn = document.querySelector(`[data-tab="${t}"]`);
+      if (btn) btn.style.display = "inline-block";
+    });
+    myAccountBtn.style.display = "none";
+    document.querySelector('[data-tab="dashboard"]').classList.add("active");
+    document.getElementById("dashboard").classList.add("active");
+    loadSummary();
+  }
+}
 
 // ---------- Tabs ----------
 function setupTabs() {
@@ -19,6 +87,7 @@ function setupTabs() {
       if (btn.dataset.tab === "customers") loadCustomers();
       if (btn.dataset.tab === "accounts") loadAccounts();
       if (btn.dataset.tab === "reports") { loadFlagged(); loadAuditLog(); }
+      if (btn.dataset.tab === "myaccount") loadMyAccounts();
     });
   });
 }
@@ -32,8 +101,7 @@ function showToast(message, isError = false) {
 }
 
 function formToJson(form) {
-  const data = Object.fromEntries(new FormData(form).entries());
-  return data;
+  return Object.fromEntries(new FormData(form).entries());
 }
 
 // ---------- Forms ----------
@@ -45,6 +113,18 @@ function setupForms() {
       showToast("Customer onboarded successfully");
       e.target.reset();
       loadCustomers();
+    } catch (err) { showToast(err.message, true); }
+  });
+
+  const createLoginForm = document.getElementById("create-login-form");
+  createLoginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+      const body = formToJson(e.target);
+      body.customerId = Number(body.customerId);
+      await Api.registerCustomerLogin(body);
+      showToast("Customer login created");
+      e.target.reset();
     } catch (err) { showToast(err.message, true); }
   });
 
@@ -117,7 +197,17 @@ async function loadCustomers() {
         <td>${c.email}</td>
         <td>${c.nationalId}</td>
         <td>${c.onboardedDate}</td>
+        <td><button class="btn" style="padding:5px 10px;font-size:0.8rem;" onclick="removeCustomer(${c.id})">Remove</button></td>
       </tr>`).join("");
+  } catch (err) { showToast(err.message, true); }
+}
+
+async function removeCustomer(id) {
+  if (!confirm(`Remove customer #${id}? This cannot be undone.`)) return;
+  try {
+    await Api.deleteCustomer(id);
+    showToast("Customer removed");
+    loadCustomers();
   } catch (err) { showToast(err.message, true); }
 }
 
@@ -181,5 +271,28 @@ async function loadAuditLog() {
         <td>${l.details || ""}</td>
         <td>${l.performedBy}</td>
       </tr>`).join("");
+  } catch (err) { showToast(err.message, true); }
+}
+
+async function loadMyAccounts() {
+  try {
+    const accounts = await Api.getMyAccounts();
+    const container = document.getElementById("my-accounts-list");
+    container.innerHTML = accounts.map(a => `
+      <div class="card" style="margin-bottom:10px;">
+        <span class="card-label">${a.accountType} - ${a.accountNumber}</span>
+        <span class="card-value">$${Number(a.balance).toFixed(2)}</span>
+        <button class="btn" style="margin-top:8px;width:fit-content;" onclick="loadMyTransactions('${a.accountNumber}')">View Transactions</button>
+      </div>`).join("");
+  } catch (err) { showToast(err.message, true); }
+}
+
+async function loadMyTransactions(accountNumber) {
+  try {
+    const txns = await Api.getMyTransactions(accountNumber);
+    const tbody = document.getElementById("my-transactions-body");
+    tbody.innerHTML = txns.map(t => `
+      <tr><td>${new Date(t.timestamp).toLocaleString()}</td><td>${t.type}</td>
+      <td>$${Number(t.amount).toFixed(2)}</td><td>$${Number(t.balanceAfter).toFixed(2)}</td></tr>`).join("");
   } catch (err) { showToast(err.message, true); }
 }

@@ -14,18 +14,22 @@ public class AppUser {
     private String username;
 
     @Column(nullable = false)
-    private String passwordHash; // BCrypt encoded
+    private String passwordHash;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
+    @Column
+    private Long customerId;
+
     public AppUser() {}
 
-    public AppUser(String username, String passwordHash, Role role) {
+    public AppUser(String username, String passwordHash, Role role, Long customerId) {
         this.username = username;
         this.passwordHash = passwordHash;
         this.role = role;
+        this.customerId = customerId;
     }
 
     public Long getId() { return id; }
@@ -36,4 +40,6 @@ public class AppUser {
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
+    public Long getCustomerId() { return customerId; }
+    public void setCustomerId(Long customerId) { this.customerId = customerId; }
 }

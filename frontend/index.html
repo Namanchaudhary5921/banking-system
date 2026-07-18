@@ -8,12 +8,27 @@
 </head>
 <body>
 
+<!-- LOGIN SCREEN -->
+<div id="login-screen" class="login-screen">
+  <div class="login-card">
+    <h1>Multi-Tier Banking System</h1>
+    <p class="login-subtitle">Sign in to continue</p>
+    <input id="username" type="text" placeholder="Username" autocomplete="username">
+    <input id="password" type="password" placeholder="Password" autocomplete="current-password">
+    <button id="login-submit-btn" class="btn login-btn-full">Login</button>
+    <div id="login-error" class="login-error"></div>
+    <p class="login-hint">Staff demo logins: admin / admin123 &nbsp;|&nbsp; teller / teller123</p>
+  </div>
+</div>
+
+<!-- MAIN APP (hidden until login) -->
+<div id="app-shell" style="display:none;">
+
 <header class="topbar">
   <div class="brand">Multi-Tier Banking System</div>
   <div class="auth-box">
-    <input id="username" type="text" placeholder="username" value="admin">
-    <input id="password" type="password" placeholder="password" value="admin123">
-    <span id="auth-status" class="status-dot" title="Not connected"></span>
+    <span id="logged-in-as"></span>
+    <button id="logout-btn" class="btn">Logout</button>
   </div>
 </header>
 
@@ -23,6 +38,7 @@
   <button class="tab-btn" data-tab="accounts">Accounts</button>
   <button class="tab-btn" data-tab="transactions">Transactions</button>
   <button class="tab-btn" data-tab="reports">Reports &amp; Audit</button>
+  <button class="tab-btn" data-tab="myaccount" style="display:none;">My Account</button>
 </nav>
 
 <main>
@@ -51,8 +67,17 @@
       <input name="address" placeholder="Address" required>
       <button class="btn" type="submit">Onboard Customer</button>
     </form>
+
+    <form id="create-login-form" class="inline-form">
+      <h3>Create Customer Login (admin only)</h3>
+      <input name="customerId" type="number" placeholder="Customer ID" required>
+      <input name="username" placeholder="Username" required>
+      <input name="password" type="password" placeholder="Password (min 6 chars)" required>
+      <button class="btn" type="submit">Create Login</button>
+    </form>
+
     <table>
-      <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>National ID</th><th>Onboarded</th></tr></thead>
+      <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>National ID</th><th>Onboarded</th><th>Actions</th></tr></thead>
       <tbody id="customer-table-body"></tbody>
     </table>
   </section>
@@ -131,7 +156,20 @@
     </table>
   </section>
 
+  <!-- MY ACCOUNT (customer self-service) -->
+  <section id="myaccount" class="tab-panel">
+    <h2>My Account</h2>
+    <div id="my-accounts-list"></div>
+    <h3>Transaction History</h3>
+    <table>
+      <thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Balance After</th></tr></thead>
+      <tbody id="my-transactions-body"></tbody>
+    </table>
+  </section>
+
 </main>
+
+</div>
 
 <div id="toast" class="toast"></div>
 
