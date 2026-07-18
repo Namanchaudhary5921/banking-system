@@ -1,0 +1,191 @@
+:root {
+  --wf-red: #d71e28;
+  --wf-red-dark: #b71c26;
+  --ink: #1a1a1a;
+  --muted: #6b7280;
+  --bg: #f5f6f8;
+  --card-bg: #ffffff;
+  --border: #e2e4e8;
+  --success: #1a7f37;
+  --warn: #b45309;
+  --warn-bg: #fff7ed;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.topbar {
+  background: var(--wf-red);
+  color: white;
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand { font-weight: 700; font-size: 1.15rem; letter-spacing: 0.2px; }
+
+.auth-box { display: flex; align-items: center; gap: 8px; }
+.auth-box input {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 0.85rem;
+  width: 110px;
+}
+
+.status-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #9ca3af; display: inline-block;
+}
+.status-dot.ok { background: #22c55e; }
+.status-dot.bad { background: #ef4444; }
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+}
+
+.tab-btn {
+  border: none;
+  background: transparent;
+  padding: 14px 16px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: var(--muted);
+  border-bottom: 3px solid transparent;
+}
+
+.tab-btn.active {
+  color: var(--wf-red);
+  border-bottom: 3px solid var(--wf-red);
+  font-weight: 600;
+}
+
+main { padding: 24px; max-width: 1100px; margin: 0 auto; }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+h2 { margin-top: 0; }
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.card.warn { border-color: var(--warn); background: var(--warn-bg); }
+
+.card-label { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.card-value { font-size: 1.6rem; font-weight: 700; }
+
+.inline-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  align-items: center;
+}
+
+.inline-form h3 { width: 100%; margin: 0 0 4px 0; font-size: 0.95rem; }
+
+.inline-form input, .inline-form select {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  flex: 1;
+  min-width: 120px;
+}
+
+.btn {
+  background: var(--wf-red);
+  color: white;
+  border: none;
+  padding: 9px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.btn:hover { background: var(--wf-red-dark); }
+
+.txn-forms {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+.txn-forms .inline-form { flex-direction: column; align-items: stretch; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+th, td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.88rem;
+}
+
+th { background: #fafafa; color: var(--muted); font-weight: 600; }
+
+tr.flagged-row { background: var(--warn-bg); }
+
+.badge {
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.badge.yes { background: #fee2e2; color: #b91c1c; }
+.badge.no { background: #dcfce7; color: var(--success); }
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--ink);
+  color: white;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.25s ease;
+  pointer-events: none;
+  max-width: 320px;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.error { background: var(--wf-red); }

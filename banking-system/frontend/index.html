@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multi-Tier Banking System</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">Multi-Tier Banking System</div>
+  <div class="auth-box">
+    <input id="username" type="text" placeholder="username" value="admin">
+    <input id="password" type="password" placeholder="password" value="admin123">
+    <span id="auth-status" class="status-dot" title="Not connected"></span>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+  <button class="tab-btn" data-tab="customers">Customers</button>
+  <button class="tab-btn" data-tab="accounts">Accounts</button>
+  <button class="tab-btn" data-tab="transactions">Transactions</button>
+  <button class="tab-btn" data-tab="reports">Reports &amp; Audit</button>
+</nav>
+
+<main>
+
+  <!-- DASHBOARD -->
+  <section id="dashboard" class="tab-panel active">
+    <h2>Overview</h2>
+    <div class="cards" id="summary-cards">
+      <div class="card"><span class="card-label">Total Customers</span><span class="card-value" id="stat-customers">-</span></div>
+      <div class="card"><span class="card-label">Total Accounts</span><span class="card-value" id="stat-accounts">-</span></div>
+      <div class="card"><span class="card-label">Assets Under Management</span><span class="card-value" id="stat-assets">-</span></div>
+      <div class="card warn"><span class="card-label">Flagged Transactions</span><span class="card-value" id="stat-flagged">-</span></div>
+    </div>
+    <button class="btn" onclick="loadSummary()">Refresh</button>
+  </section>
+
+  <!-- CUSTOMERS -->
+  <section id="customers" class="tab-panel">
+    <h2>Customers</h2>
+    <form id="customer-form" class="inline-form">
+      <input name="firstName" placeholder="First name" required>
+      <input name="lastName" placeholder="Last name" required>
+      <input name="email" type="email" placeholder="Email" required>
+      <input name="nationalId" placeholder="National ID" required>
+      <input name="phone" placeholder="Phone" required>
+      <input name="address" placeholder="Address" required>
+      <button class="btn" type="submit">Onboard Customer</button>
+    </form>
+    <table>
+      <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>National ID</th><th>Onboarded</th></tr></thead>
+      <tbody id="customer-table-body"></tbody>
+    </table>
+  </section>
+
+  <!-- ACCOUNTS -->
+  <section id="accounts" class="tab-panel">
+    <h2>Accounts</h2>
+    <form id="account-form" class="inline-form">
+      <input name="customerId" type="number" placeholder="Customer ID" required>
+      <select name="accountType" required>
+        <option value="CHECKING">Checking</option>
+        <option value="SAVINGS">Savings</option>
+      </select>
+      <input name="openingBalance" type="number" step="0.01" placeholder="Opening balance" value="0">
+      <button class="btn" type="submit">Open Account</button>
+    </form>
+    <table>
+      <thead><tr><th>Account #</th><th>Customer ID</th><th>Type</th><th>Balance</th><th>Rate</th><th>Active</th></tr></thead>
+      <tbody id="account-table-body"></tbody>
+    </table>
+  </section>
+
+  <!-- TRANSACTIONS -->
+  <section id="transactions" class="tab-panel">
+    <h2>Transactions</h2>
+
+    <div class="txn-forms">
+      <form id="deposit-form" class="inline-form">
+        <h3>Deposit</h3>
+        <input name="accountNumber" placeholder="Account #" required>
+        <input name="amount" type="number" step="0.01" placeholder="Amount" required>
+        <button class="btn" type="submit">Deposit</button>
+      </form>
+
+      <form id="withdraw-form" class="inline-form">
+        <h3>Withdraw</h3>
+        <input name="accountNumber" placeholder="Account #" required>
+        <input name="amount" type="number" step="0.01" placeholder="Amount" required>
+        <button class="btn" type="submit">Withdraw</button>
+      </form>
+
+      <form id="transfer-form" class="inline-form">
+        <h3>Transfer</h3>
+        <input name="fromAccountNumber" placeholder="From account #" required>
+        <input name="toAccountNumber" placeholder="To account #" required>
+        <input name="amount" type="number" step="0.01" placeholder="Amount" required>
+        <button class="btn" type="submit">Transfer</button>
+      </form>
+    </div>
+
+    <h3>Lookup history</h3>
+    <div class="inline-form">
+      <input id="history-account" placeholder="Account #">
+      <button class="btn" onclick="loadHistory()">Load History</button>
+    </div>
+    <table>
+      <thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Balance After</th><th>Flagged</th></tr></thead>
+      <tbody id="transaction-table-body"></tbody>
+    </table>
+  </section>
+
+  <!-- REPORTS -->
+  <section id="reports" class="tab-panel">
+    <h2>Flagged Transactions</h2>
+    <button class="btn" onclick="loadFlagged()">Refresh Flagged</button>
+    <table>
+      <thead><tr><th>Time</th><th>Account</th><th>Type</th><th>Amount</th><th>Reason</th></tr></thead>
+      <tbody id="flagged-table-body"></tbody>
+    </table>
+
+    <h2>Audit Log</h2>
+    <button class="btn" onclick="loadAuditLog()">Refresh Audit Log</button>
+    <table>
+      <thead><tr><th>Time</th><th>Entity</th><th>Action</th><th>Details</th><th>By</th></tr></thead>
+      <tbody id="audit-table-body"></tbody>
+    </table>
+  </section>
+
+</main>
+
+<div id="toast" class="toast"></div>
+
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
