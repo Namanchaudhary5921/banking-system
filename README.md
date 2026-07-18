@@ -124,3 +124,12 @@ This is a portfolio/demo project, not a production banking system. Auth
 uses in-memory demo users, there's no real KYC/payment-rail integration,
 and the fraud engine is intentionally simple and explainable rather than
 ML-based. See `docs/requirements.md` for the full in/out-of-scope list.
+
+## FINAL LOOK
+<img width="1436" height="812" alt="Screenshot 2026-07-18 at 3 51 49 PM" src="https://github.com/user-attachments/assets/edfa8137-4c4c-4d21-9780-e6795c7f68d7" />
+<img width="1438" height="815" alt="Screenshot 2026-07-18 at 3 52 10 PM" src="https://github.com/user-attachments/assets/19d5b416-d2cb-42c4-a3db-dd10c833989b" />
+<img width="1440" height="813" alt="Screenshot 2026-07-18 at 3 52 18 PM" src="https://github.com/user-attachments/assets/16a15a74-bb4d-4661-90e7-1192db24e9c2" />
+<img width="1440" height="814" alt="Screenshot 2026-07-18 at 3 52 31 PM" src="https://github.com/user-attachments/assets/378a7c77-765d-4687-b7b9-2df5879548be" />
+<img width="1440" height="812" alt="Screenshot 2026-07-18 at 3 52 44 PM" src="https://github.com/user-attachments/assets/27c89d95-88c4-4e5e-961c-43c9bea7abef" />
+<img width="1440" height="812" alt="Screenshot 2026-07-18 at 3 52 53 PM" src="https://github.com/user-attachments/assets/180b5566-c2ab-46ba-be1d-c16f338fead5" />
+<img width="1440" height="814" alt="Screenshot 2026-07-18 at 3 53 17 PM" src="https://github.com/user-attachments/assets/1c9cd105-73f5-496c-94e4-82e0bd578693" />
